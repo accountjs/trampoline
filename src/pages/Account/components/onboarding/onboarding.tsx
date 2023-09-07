@@ -1,49 +1,64 @@
 import {
   Box,
+  Button,
   CardActions,
   CardContent,
   Typography,
 } from '@mui/material';
-import { Stack } from '@mui/system';
+import { LoadingButton } from '@mui/lab';
 import React from 'react';
+
+
+import { chains, projectId } from "./ZeroDevWrapper";
+import { useConnect } from "wagmi";
+import { ZeroDevConnector } from "@zerodev/wagmi";
+import { createPasskeyOwner, getPasskeyOwner, getOrCreatePasskeyOwner } from '@zerodev/sdk/passkey'
+import { useState } from "react";
+
 import { OnboardingComponent, OnboardingComponentProps } from '../types';
-import PrimaryButton from '../PrimaryButton';
+
 
 const Onboarding: OnboardingComponent = ({
   onOnboardingComplete,
 }: OnboardingComponentProps) => {
+
+  const [registerLoading, setRegisterLoading] = useState(false);
+  const { connect } = useConnect()
+    ;
+
+  getOrCreatePasskeyOwner({ name: 'ZeroDev', projectId });
+
+  const handleRegister = async () => {
+    setRegisterLoading(true);
+    // connect({
+    //   connector: new ZeroDevConnector({
+    //     chains, options: {
+    //       projectId,
+    //       owner: await createPasskeyOwner({ name: 'ZeroDev', projectId })
+    //     }
+    //   })
+    // })
+    setTimeout(() => setRegisterLoading(false), 3000);
+
+
+
+
+  }
+
+
   return (
-    <Box sx={{ padding: 2 }}>
-      <CardContent>
-        <Typography variant="h3" gutterBottom>
-          Customisable Account Component
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          You can show as many steps as you want in this dummy component. You
-          need to call the function <b>onOnboardingComplete</b> passed as a
-          props to this component. <br />
-          <br />
-          The function takes a context as a parameter, this context will be
-          passed to your AccountApi when creating a new account.
-          <br />
-          This Component is defined in exported in{' '}
-        </Typography>
-        <Typography variant="caption">
-          trampoline/src/pages/Account/components/onboarding/index.ts
-        </Typography>
-      </CardContent>
-      <CardActions sx={{ pl: 4, pr: 4, width: '100%' }}>
-        <Stack spacing={2} sx={{ width: '100%' }}>
-          <PrimaryButton
-            size="large"
-            variant="contained"
-            onClick={() => onOnboardingComplete()}
-          >
-            Continue
-          </PrimaryButton>
-        </Stack>
-      </CardActions>
-    </Box>
+    <Box sx={{
+      height: '80vh',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: 2
+    }}>
+      <LoadingButton variant='contained' size='large'
+        loading={registerLoading}
+        onClick={handleRegister} >PassKey注册</LoadingButton>
+    </Box >
   );
 };
 
