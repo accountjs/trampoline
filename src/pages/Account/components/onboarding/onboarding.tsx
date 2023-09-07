@@ -26,7 +26,6 @@ const Onboarding: OnboardingComponent = ({
   const { connect } = useConnect()
     ;
 
-  getOrCreatePasskeyOwner({ name: 'ZeroDev', projectId });
 
   const handleRegister = async () => {
     setRegisterLoading(true);
